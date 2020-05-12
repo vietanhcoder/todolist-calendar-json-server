@@ -1,14 +1,26 @@
 import axios from "axios";
-
-export const apiFetchDate = async () => {
-  return axios.get("http://localhost:4000/date");
+import { URL_APP } from "../configs";
+export const apiFetchTodos = async () => {
+  return axios.get(URL_APP.URL_API);
 };
 
-// export const apiFecthComments = async () => {
-//   return axios.get("http://localhost:4000/comments/");
-// };
-
-export const makePostRequest = async () => {
+export const makePostRequest = (newTodo) => {
   // let res = await axios.post("http://localhost:4000/date");
-  return axios.post("http://localhost:4000/date");
+  return axios({
+    method: "POST",
+    url: URL_APP.URL_API,
+    data: {
+      id: newTodo.id,
+      title: newTodo.title,
+      isComplete: newTodo.isComplete,
+      date: newTodo.date,
+    },
+  });
+};
+
+export const deleteTodoApi = (id) => {
+  return axios({
+    method: "DELETE",
+    url: `URL_APP.URL_API/${id}`,
+  });
 };

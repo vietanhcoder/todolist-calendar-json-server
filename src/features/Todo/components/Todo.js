@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Col, Row } from "reactstrap";
 import { connect } from "react-redux";
 
-import { removeTodo, ToggleCompletion } from "../../../redux/actions";
+import {
+  removeTodo,
+  ToggleCompletion,
+  fectchTodos,
+} from "../../../redux/actions";
 
-const Todo = ({ todos, removeTodo, ToggleCompletion }) => {
+const Todo = ({ todos, removeTodo, ToggleCompletion, fectchTodos }) => {
   const _removeTodo = (id) => {
-    console.log("_removeTodo", id);
     removeTodo(id);
   };
 
   const _completeTodo = (id) => {
-    console.log("_completeTodo", id);
     ToggleCompletion(id);
   };
+
+  useEffect(() => {
+    fectchTodos();
+  }, []);
 
   return (
     <>
@@ -81,7 +87,6 @@ const Todo = ({ todos, removeTodo, ToggleCompletion }) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   const {
     todoReducers: { todos },
   } = state;
@@ -92,6 +97,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   ToggleCompletion,
   removeTodo,
+  fectchTodos,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Todo);

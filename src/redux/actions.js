@@ -5,9 +5,9 @@ import {
   FETCH_DATE_START,
   FETCH_DATE_SUCCESS,
   FETCH_DATE_ERROR,
-  API_POST_SUCCESS,
-  API_POST_ERROR,
-  API_POST_START,
+  CREATE_TODO_START,
+  CREATE_TODO_SUCCESS,
+  CREATE_TODO_ERROR,
 } from "./types";
 
 import * as api from "../server/api";
@@ -24,17 +24,10 @@ export const ToggleCompletion = (id) => ({
   },
 });
 
-export const removeTodo = (id) => ({
-  type: REMOVE_TODO,
-  payload: {
-    id,
-  },
-});
-
-export const fectchDate = () => async (dispatch) => {
+export const fectchTodos = () => async (dispatch) => {
   dispatch({ type: FETCH_DATE_START });
   try {
-    const res = await api.apiFetchDate();
+    const res = await api.apiFetchTodos();
     const data = res.data;
     dispatch({ type: FETCH_DATE_SUCCESS, payload: { data } });
   } catch (err) {
@@ -42,13 +35,24 @@ export const fectchDate = () => async (dispatch) => {
   }
 };
 
-export const postDate = () => async (dispatch) => {
-  dispatch({ type: API_POST_START });
+export const removeTodo = (id) => async (dispatch) => {
+  dispatch({
+    type: REMOVE_TODO,
+    id,
+  });
   try {
-    const res = await api.makePostRequest();
+    const res = api.deleteTodoApi(id);
+    console.log("OUTPUT: removeTodo -> res", res);
+  } catch (err) {}
+};
+
+export const postDate = (paraTodo) => async (dispatch) => {
+  dispatch({ type: CREATE_TODO_START, paraTodo });
+  try {
+    const res = await api.makePostRequest(paraTodo);
     const data = res.data;
-    dispatch({ type: API_POST_SUCCESS, payload: { data } });
+    dispatch({ type: CREATE_TODO_SUCCESS, payload: { data } });
   } catch (err) {
-    dispatch({ type: API_POST_ERROR });
+    dispatch({ type: CREATE_TODO_ERROR });
   }
 };

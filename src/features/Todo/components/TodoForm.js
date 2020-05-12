@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { connect } from "react-redux";
 import { Button, Form, FormGroup, Label, Input, Col, Row } from "reactstrap";
-import { addTodo } from "../../../redux/actions";
-
-const TodoForm = ({ addTodo }) => {
+import { postDate } from "../../../redux/actions";
+import * as helper from "../../../helper/Helpers";
+const TodoForm = ({ addTodo, postDate }) => {
   const [todo, setTodo] = useState("");
 
   const _handleOnChange = (e) => {
@@ -14,15 +14,16 @@ const TodoForm = ({ addTodo }) => {
       setTodo(value);
     }
   };
+
   const _handleAddTodo = () => {
     // console.log("_handleAddTodo");
     const newObj = {
-      id: uuidv4(),
       title: todo,
       isComplete: false,
+      date: helper.formatFullDate(new Date()),
     };
     setTodo("");
-    addTodo(newObj);
+    postDate(newObj);
   };
   return (
     <div>
@@ -64,6 +65,6 @@ const TodoForm = ({ addTodo }) => {
 };
 
 const mapDispatchToProps = {
-  addTodo,
+  postDate,
 };
 export default connect(null, mapDispatchToProps)(TodoForm);
