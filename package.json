@@ -9,10 +9,14 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "json-server": "^0.16.1",
+    "moment": "^2.25.3",
     "react": "^16.13.1",
+    "react-calendar": "^3.0.1",
+    "react-datepicker": "^2.15.0",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-scripts": "3.4.1",
+    "react-uuid": "^1.0.2",
     "reactstrap": "^8.4.1",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
@@ -40,5 +44,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "font-awesome": "^4.7.0"
   }
 }

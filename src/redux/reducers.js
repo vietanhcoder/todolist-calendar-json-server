@@ -1,5 +1,4 @@
 import {
-  ADD_TODO,
   TOGGLE_TODO,
   REMOVE_TODO,
   FETCH_DATE_START,
@@ -7,53 +6,43 @@ import {
   FETCH_DATE_ERROR,
   CREATE_TODO_START,
   CREATE_TODO_SUCCESS,
-  CREATE_TODO_ERROR,
+  SET_DAY,
 } from "./types";
-import * as api from "../server/api";
 
 const initialState = {
   loading: false,
-  date: "",
+  dateCalendar: "",
   todos: [],
   error: false,
-  postdb: [],
+  showTodoDate: [],
 };
 
 const reducers = (state = initialState, action) => {
   switch (action.type) {
     //----------------------------------------------------------------
-    case ADD_TODO: {
+    case REMOVE_TODO: {
+      const { id } = action.payload;
+      const newTodos = state.todos.filter((todo) => todo.id !== id);
       return {
         ...state,
-        todos: [...state.todos, action.payload],
+        todos: newTodos,
       };
     }
-    //----------------------------------------------------------------
-    case REMOVE_TODO: {
-      // const { id } = action.payload;
-      // const removeIndex = state.todos
-      //   .map(function (item) {
-      //     return item.id;
-      //   })
-      //   .indexOf(id);
-      // const removeArray = state.todos.splice(removeIndex, 1);
-      // return {
-      //   ...state,
-      //   todos: [...removeArray],
-      // };
-    }
-    // case TOGGLE_TODO: {
-    //   return {
-    //     ...state,
-    //     todos: state.todos.map((todo) => {
-    //       if (todo.id === action.payload.id) {
-    //         todo.isCompleted = !todo.isCompleted;
-    //       }
-    //       return todo;
-    //     }),
-    //   };
-    // }
 
+    //----------------------------------------------------------------
+    case TOGGLE_TODO: {
+      const { id } = action.payload.data;
+      const toggleTodo = state.todos.map((todo) => {
+        if (todo.id === id) {
+          todo.isCompleted = !todo.isCompleted;
+        }
+        return todo;
+      });
+      return {
+        ...state,
+        todos: toggleTodo,
+      };
+    }
     //----------------------------------------------------------------
     case FETCH_DATE_START: {
       return {
@@ -62,6 +51,15 @@ const reducers = (state = initialState, action) => {
       };
     }
     case FETCH_DATE_SUCCESS: {
+      // const filterTodoDate = state.action.payload.data.filter((todoDate) => {
+      //   if (todoDate.date === state.dateCalendar) {
+      //     return todoDate;
+      //   }
+      //   return null;
+      // });
+      // console.log("OUTPUT: reducers -> filterTodoDate", filterTodoDate);
+      // state.action.payload.data
+
       return {
         ...state,
         todos: action.payload.data,
@@ -79,11 +77,19 @@ const reducers = (state = initialState, action) => {
     case CREATE_TODO_START: {
       return { ...state, loading: true };
     }
+    //----------------------------------------------------------------
     case CREATE_TODO_SUCCESS: {
       return {
         ...state,
         loading: false,
         todos: [action.payload.data, ...state.todos],
+      };
+    }
+    //----------------------------------------------------------------
+    case SET_DAY: {
+      return {
+        ...state,
+        dateCalendar: action.payload,
       };
     }
     //----------------------------------------------------------------

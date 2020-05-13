@@ -1,6 +1,7 @@
 export const ADD_TODO = "APP/ADD_TODO";
 export const TOGGLE_TODO = "APP/TOGGLE_TODO";
 export const REMOVE_TODO = "APP/REMOVE_TODO";
+export const SET_DAY = "APP/SET_DAY";
 
 // Fetch date from server
 

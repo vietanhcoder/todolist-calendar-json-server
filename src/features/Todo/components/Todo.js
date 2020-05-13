@@ -13,19 +13,18 @@ const Todo = ({ todos, removeTodo, ToggleCompletion, fectchTodos }) => {
     removeTodo(id);
   };
 
-  const _completeTodo = (id) => {
-    ToggleCompletion(id);
+  const _completeTodo = (id, isCompleted) => {
+    ToggleCompletion(id, isCompleted);
   };
 
   useEffect(() => {
     fectchTodos();
   }, []);
-
   return (
     <>
       <div className="todo__wrapper">
         <ul className="list-wrapper">
-          this is list todo
+          this is todo list
           {todos.length > 0 ? (
             todos.map((todo, idx) => {
               return (
@@ -52,6 +51,9 @@ const Todo = ({ todos, removeTodo, ToggleCompletion, fectchTodos }) => {
                       >
                         {todo.title}
                       </div>
+                    </Col>
+                    <Col xs="2">
+                      <div>{todo.date}</div>
                     </Col>
                     <Col>
                       <div className="btn-container">

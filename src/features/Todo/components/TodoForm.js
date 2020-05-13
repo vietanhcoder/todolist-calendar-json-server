@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { connect } from "react-redux";
 import { Button, Form, FormGroup, Label, Input, Col, Row } from "reactstrap";
 import { postDate } from "../../../redux/actions";
-import * as helper from "../../../helper/Helpers";
-const TodoForm = ({ addTodo, postDate }) => {
+import "react-datepicker/dist/react-datepicker.css";
+const TodoForm = ({ postDate, dateCalendar }) => {
   const [todo, setTodo] = useState("");
-
   const _handleOnChange = (e) => {
-    // console.log("_handleOnChange");
     const { value } = e.target;
     if (!value !== "") {
       setTodo(value);
@@ -16,11 +13,10 @@ const TodoForm = ({ addTodo, postDate }) => {
   };
 
   const _handleAddTodo = () => {
-    // console.log("_handleAddTodo");
     const newObj = {
       title: todo,
-      isComplete: false,
-      date: helper.formatFullDate(new Date()),
+      isCompleted: false,
+      date: dateCalendar,
     };
     setTodo("");
     postDate(newObj);
@@ -64,7 +60,15 @@ const TodoForm = ({ addTodo, postDate }) => {
   );
 };
 
+const mapStateToProps = (state) => {
+  const {
+    todoReducers: { dateCalendar },
+  } = state;
+  return {
+    dateCalendar,
+  };
+};
 const mapDispatchToProps = {
   postDate,
 };
-export default connect(null, mapDispatchToProps)(TodoForm);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoForm);

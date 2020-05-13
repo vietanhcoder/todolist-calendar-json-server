@@ -8,6 +8,7 @@ import {
   CREATE_TODO_START,
   CREATE_TODO_SUCCESS,
   CREATE_TODO_ERROR,
+  SET_DAY,
 } from "./types";
 
 import * as api from "../server/api";
@@ -17,12 +18,18 @@ export const addTodo = (payload) => ({
   payload,
 });
 
-export const ToggleCompletion = (id) => ({
-  type: TOGGLE_TODO,
-  payload: {
-    id,
-  },
-});
+export const ToggleCompletion = (id, isCompleted) => async (dispatch) => {
+  try {
+    const res = await api.toggleTodoApi(id);
+    const data = res.data;
+    dispatch({
+      type: TOGGLE_TODO,
+      payload: { data },
+    });
+  } catch (err) {
+    alert("can't toggle it");
+  }
+};
 
 export const fectchTodos = () => async (dispatch) => {
   dispatch({ type: FETCH_DATE_START });
@@ -36,23 +43,28 @@ export const fectchTodos = () => async (dispatch) => {
 };
 
 export const removeTodo = (id) => async (dispatch) => {
-  dispatch({
-    type: REMOVE_TODO,
-    id,
-  });
   try {
-    const res = api.deleteTodoApi(id);
-    console.log("OUTPUT: removeTodo -> res", res);
-  } catch (err) {}
+    await api.deleteTodoApi(id);
+    dispatch({
+      type: REMOVE_TODO,
+      payload: { id },
+    });
+  } catch (err) {
+    alert("can't remove todo");
+  }
 };
 
-export const postDate = (paraTodo) => async (dispatch) => {
-  dispatch({ type: CREATE_TODO_START, paraTodo });
+export const postDate = (newTodo) => async (dispatch) => {
+  dispatch({ type: CREATE_TODO_START, newTodo });
   try {
-    const res = await api.makePostRequest(paraTodo);
+    const res = await api.makePostRequest(newTodo);
     const data = res.data;
     dispatch({ type: CREATE_TODO_SUCCESS, payload: { data } });
   } catch (err) {
     dispatch({ type: CREATE_TODO_ERROR });
   }
 };
+export const setDay = (payload) => ({
+  type: SET_DAY,
+  payload,
+});
